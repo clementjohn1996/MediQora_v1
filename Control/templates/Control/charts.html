@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Flot Charts Dashboard</h2>
+
+    <!-- Line Chart -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Line Chart
+        </div>
+        <div class="card-body">
+            <div id="flot-line-chart" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Bar Chart
+        </div>
+        <div class="card-body">
+            <div id="flot-bar-chart" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <!-- Pie Chart -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Pie Chart
+        </div>
+        <div class="card-body">
+            <div id="flot-pie-chart" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <!-- Inject chart data as JS variables -->
+    <script>
+        const flot_line_data = {{ flot_line_data|safe }};
+        const flot_bar_data = {{ flot_bar_data|safe }};
+        const flot_pie_data = {{ flot_pie_data|safe }};
+    </script>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Flot Libraries -->
+<script src="{% static 'js/flot/jquery.flot.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.tooltip.min.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.pie.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.categories.js' %}"></script>
+<!-- Custom Flot Chart Logic -->
+<script src="{% static 'js/flot/chart-data-flot.js' %}"></script>
+{% endblock %}

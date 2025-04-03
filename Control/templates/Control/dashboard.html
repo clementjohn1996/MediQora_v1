@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- External CSS -->
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>Dashboard <small>Statistics Overview</small></h1>
+      <ol class="breadcrumb">
+        <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+      </ol>
+      <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        Welcome to PRS hospital CRM! All charts and metrics are now data-driven.
+      </div>
+    </div>
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-6"><i class="fa fa-user fa-5x"></i></div>
+            <div class="col-xs-6 text-right">
+              <p class="announcement-heading">{{ enquiry_count }}</p>
+              <p class="announcement-text">Total Enquiries</p>
+            </div>
+          </div>
+        </div>
+        <a href="{% url 'enquiry_list' %}">
+          <div class="panel-footer announcement-bottom">
+            <div class="row">
+              <div class="col-xs-6">View Enquiries</div>
+              <div class="col-xs-6 text-right"><i class="fa fa-arrow-circle-right"></i></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-6"><i class="fa fa-globe fa-5x"></i></div>
+            <div class="col-xs-6 text-right">
+              <p class="announcement-heading">{{ unique_countries }}</p>
+              <p class="announcement-text">Countries</p>
+            </div>
+          </div>
+        </div>
+        <a href="#">
+          <div class="panel-footer announcement-bottom">
+            <div class="row">
+              <div class="col-xs-6">View Countries</div>
+              <div class="col-xs-6 text-right"><i class="fa fa-arrow-circle-right"></i></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="panel panel-warning">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-6"><i class="fa fa-map-marker fa-5x"></i></div>
+            <div class="col-xs-6 text-right">
+              <p class="announcement-heading">{{ unique_states }}</p>
+              <p class="announcement-text">States</p>
+            </div>
+          </div>
+        </div>
+        <a href="#">
+          <div class="panel-footer announcement-bottom">
+            <div class="row">
+              <div class="col-xs-6">View States</div>
+              <div class="col-xs-6 text-right"><i class="fa fa-arrow-circle-right"></i></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-6"><i class="fa fa-building fa-5x"></i></div>
+            <div class="col-xs-6 text-right">
+              <p class="announcement-heading">{{ unique_cities }}</p>
+              <p class="announcement-text">Cities</p>
+            </div>
+          </div>
+        </div>
+        <a href="#">
+          <div class="panel-footer announcement-bottom">
+            <div class="row">
+              <div class="col-xs-6">View Cities</div>
+              <div class="col-xs-6 text-right"><i class="fa fa-arrow-circle-right"></i></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title"><i class="fa fa-line-chart"></i> Enquiry Trend</h3>
+        </div>
+        <div class="panel-body">
+          <canvas id="enquiryChart" data-stats='{{ enquiry_stats|safe }}'></canvas>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.row -->
+</div><!-- /#page-wrapper -->
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- External JS -->
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,3 +1,10 @@
 from django.shortcuts import render
 
-# Create your views here.
+def login_view(request):
+    return render(request, 'Control/login.html')
+
+def dashboard_view(request):
+    return render(request, 'Control/dashboard.html')
+
+def charts_view(request):
+    return render(request, 'Control/charts.html')
