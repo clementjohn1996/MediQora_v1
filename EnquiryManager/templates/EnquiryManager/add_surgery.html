@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if surgery %}Edit Surgery{% else %}Add Surgery{% endif %}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Patient Name:</label>
+            <input type="text" name="patient_name" class="form-control" required value="{{ surgery.patient_name|default:'' }}">
+        </div>
+        <div class="form-group">
+            <label>Doctor:</label>
+            <select name="doctor" class="form-control" required>
+                <option value="">Select Doctor</option>
+                {% for doctor in doctors %}
+                    <option value="{{ doctor.id }}" {% if surgery.doctor.id == doctor.id %}selected{% endif %}>{{ doctor.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Surgery Type:</label>
+            <input type="text" name="surgery_type" class="form-control" required value="{{ surgery.surgery_type|default:'' }}">
+        </div>
+        <div class="form-group">
+            <label>Scheduled Date:</label>
+            <input type="date" name="scheduled_date" class="form-control" required value="{{ surgery.scheduled_date|date:'Y-m-d' }}">
+        </div>
+        <div class="form-group">
+            <label>Notes:</label>
+            <textarea name="notes" class="form-control">{{ surgery.notes|default:'' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{% if surgery %}Update{% else %}Add{% endif %} Surgery</button>
+    </form>
+</div>
+{% endblock %}

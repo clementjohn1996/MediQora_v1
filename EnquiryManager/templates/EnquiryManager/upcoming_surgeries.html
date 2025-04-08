@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Upcoming Surgeries</h2>
+    
+    <!-- Filter Form -->
+    <form method="GET" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <label>Doctor:</label>
+                <select name="doctor" class="form-control">
+                    <option value="">All</option>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.id }}" {% if request.GET.doctor == doctor.id|stringformat:"s" %}selected{% endif %}>{{ doctor.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Patient Name:</label>
+                <input type="text" name="patient_name" class="form-control" value="{{ request.GET.patient_name|default:'' }}">
+            </div>
+            <div class="col-md-3">
+                <label>Scheduled Date:</label>
+                <input type="date" name="scheduled_date" class="form-control" value="{{ request.GET.scheduled_date|default:'' }}">
+            </div>
+            <div class="col-md-3 mt-4">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{% url 'upcoming_surgeries' %}" class="btn btn-secondary">Clear</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Surgery List -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Doctor</th>
+                <th>Surgery Type</th>
+                <th>Scheduled Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for surgery in surgeries %}
+            <tr>
+                <td>{{ surgery.patient_name }}</td>
+                <td>{{ surgery.doctor.name }}</td>
+                <td>{{ surgery.surgery_type }}</td>
+                <td>{{ surgery.scheduled_date }}</td>
+                <td>
+                    <a href="{% url 'edit_surgery' surgery.id %}" class="btn btn-sm btn-warning">Edit</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No upcoming surgeries found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,22 +8,218 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{% block title %}Dashboard - PRS CRM{% endblock %}</title>
+    <title>{% block title %}Dashboard - {{ site_name }}{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <link href="{% static 'css/base.css?v=2' %}" rel="stylesheet">
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link href="{% static 'css/consultation.css' %}" rel="stylesheet">
-    
 
-    <!-- Page Specific CSS -->
-    <link rel="stylesheet" href="https://cdn.oesmith.co.uk/morris-0.4.3.min.css">
 </head>
 
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">PRS CRM</a>
+        </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li class="active"><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li><a href="{% url 'charts' %}"><i class="fa fa-bar-chart-o"></i> Charts</a></li>
+                <li><a href="{% url 'enquiry_create' %}"><i class="fa fa-edit"></i> New Enquiry</a></li>
+                <li><a href="{% url 'enquiry_list' %}"><i class="fa fa-table"></i> Enquiry List</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-table fa fa-stethoscope"></i> Consultation Management <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'add_consultations' %}">Add / Edit Consultation</a></li>
+                        <li><a href="{% url 'consultation' %}">Today's Consultations</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-medkit"></i> Surgery Schedule <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{% url 'add_surgery' %}"><i class="fa fa-plus-square"></i> Add / Edit Surgery</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'today_surgeries' %}"><i class="fa fa-calendar"></i> Today's Surgeries</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'upcoming_surgeries' %}"><i class="fa fa-clock-o"></i> Upcoming Surgeries</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><a href="{% url 'feedback' %}"><i class="fa fa-comments"></i> Feedback</a></li>
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <!-- Messages Dropdown -->
+                <li class="dropdown messages-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-envelope"></i> Messages <span class="badge">{{ message_count }}</span> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">{{ message_count }} New Messages</li>
+                        {% for message in messages %}
+                        <li class="message-preview">
+                            <a href="#">
+                                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                                <span class="name">{{ message.name }}:</span>
+                                <span class="message">{{ message.message }}</span>
+                                <span class="time"><i class="fa fa-clock-o"></i> {{ message.time|date:"h:i A" }}</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        {% endfor %}
+                        <li><a href="#">View Inbox <span class="badge">{{ message_count }}</span></a></li>
+                    </ul>
+                </li>
+            
+                <!-- Alerts Dropdown -->
+                <li class="dropdown alerts-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bell"></i> Alerts <span class="badge">{{ alert_count }}</span> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for alert in alerts %}
+                        <li><a href="#">{{ alert.type }} <span class="label label-{{ alert.label|lower }}">{{ alert.type }}</span></a></li>
+                        {% endfor %}
+                        <li class="divider"></li>
+                        <li><a href="#">View All</a></li>
+                    </ul>
+                </li>
+
+                <!-- User Dropdown -->
+                <li class="dropdown user-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://placehold.co/100x100{% endif %}" class="user-avatar">{{ user.username }}
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" class="load-content" data-url="{% url 'profile' %}">Profile</a></li>
+                    <li><a href="#" class="load-content" data-url="{% url 'settings' %}">Settings</a></li>
+                    <li class="divider"></li>
+                    <li>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                    <button type="submit" class="btn btn-link" style="padding: 3px 20px; text-align: left; width: 100%;">
+                        <i class="fa fa-power-off"></i> Logout
+                    </button>
+                </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-link" style="padding: 3px 20px; text-align: left; width: 100%;">
+                        <i class="fa fa-sign-in"></i> Login
+                    </a>
+                {% endif %}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+
+    <!-- Page Content -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <aside class="col-md-3 col-lg-2 bg-light shadow-sm p-3">
+                <div class="list-group">
+                    <a href="{% url 'enquiry_create' %}" class="list-group-item list-group-item-action">New Entry</a>
+                    <a href="{% url 'enquiry_list' %}" class="list-group-item list-group-item-action">Enquiry</a>
+                    <a href="#" class="list-group-item list-group-item-action">Consultation</a>
+                    <a href="#" class="list-group-item list-group-item-action">Surgery Schedule</a>
+                    <a href="#" class="list-group-item list-group-item-action">Feedback</a>
+                </div>
+            </aside>
+
+            <main class="col-md-9 col-lg-10">
+                <div id="content-area">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+             
+        </div>
+    </div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<!-- Custom JS  -->
+<script src="{% static 'js/scripts.js' %}"></script>
+<script>
+    document.addEventListener("submit", function (e) {
+    const form = e.target;
+    if (form.id === "settings-form") {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        fetch("{% url 'settings' %}", {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Settings updated successfully!");
+            } else if (data.html) {
+                document.getElementById("content-area").innerHTML = data.html;
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+});
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const contentArea = document.getElementById("content-area");
+    
+        document.body.addEventListener("click", function (e) {
+            const target = e.target.closest(".load-content");
+            if (target) {
+                e.preventDefault();
+                const url = target.dataset.url;
+    
+                fetch(url, {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.html) {
+                        contentArea.innerHTML = data.html;
+                    } else {
+                        contentArea.innerHTML = "<p>No content returned.</p>";
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    contentArea.innerHTML = "<p style='color:red;'>Error loading content</p>";
+                });
+            }
+        });
+    });
+    </script>
+    
+    
+</body>
 </html>

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Today's Surgeries ({{ today }})</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Doctor</th>
+                <th>Surgery Type</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for surgery in surgeries %}
+            <tr>
+                <td>{{ surgery.patient_name }}</td>
+                <td>{{ surgery.doctor.name }}</td>
+                <td>{{ surgery.surgery_type }}</td>
+                <td>{{ surgery.notes }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No surgeries scheduled for today.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
