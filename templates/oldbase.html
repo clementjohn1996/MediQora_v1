@@ -1,0 +1,244 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}Dashboard - {{ site_name }}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <link href="{% static 'css/base.css?v=2' %}" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
+                <img src="{{ site_logo.url }}" alt="Logo" style="height: 30px;"> {{ site_name }}
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <!-- Messages Dropdown -->
+                <li class="dropdown messages-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-envelope"></i> Messages <span class="badge">{{ messages.count }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for message in messages %}
+                        <li>
+                            <a href="#">
+                                <span class="avatar"><img src="{{ message.sender.profile_picture.url }}" class="user-avatar"></span>
+                                <span class="name">{{ message.sender.username }}</span>
+                                <span class="message">{{ message.text }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <!-- Alerts Dropdown -->
+                <li class="dropdown alerts-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bell"></i> Alerts <span class="badge">{{ alerts.count }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for alert in alerts %}
+                        <li><a href="#">{{ alert.message }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <!-- User Dropdown -->
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://placehold.co/100x100{% endif %}" class="user-avatar">{{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="load-content" data-url="{% url 'profile' %}">Profile</a></li>
+                        <li><a href="#" class="load-content" data-url="{% url 'settings' %}">Settings</a></li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="post">{% csrf_token %}
+                                <button type="submit">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container-fluid mt-3 pt-3">
+
+        <div class="row mt-4 pt-2">
+            <ul class="nav navbar-nav side-nav">
+                <li class="active"><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li><a href="{% url 'charts' %}"><i class="fa fa-bar-chart-o"></i> Charts</a></li>
+                <li><a href="{% url 'enquiry_create' %}"><i class="fa fa-edit"></i> New Enquiry</a></li>
+                <li><a href="{% url 'enquiry_list' %}"><i class="fa fa-table"></i> Enquiry List</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-table fa fa-stethoscope"></i> Consultation Management <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'add_consultations' %}">Add / Edit Consultation</a></li>
+                        <li><a href="{% url 'consultation' %}">Today's Consultations</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-medkit"></i> Surgery Schedule <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{% url 'add_surgery' %}"><i class="fa fa-plus-square"></i> Add / Edit Surgery</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'today_surgeries' %}"><i class="fa fa-calendar"></i> Today's Surgeries</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'upcoming_surgeries' %}"><i class="fa fa-clock-o"></i> Upcoming Surgeries</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><a href="{% url 'surgery_schedule' %}"><i class="fa fa-medkit"></i> Surgery Schedule</a></li>
+                <!-- <li><a href="{% url 'feedback' %}"><i class="fa fa-comments"></i> Feedback</a></li> -->
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <!-- Messages Dropdown -->
+                <li class="dropdown messages-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-envelope"></i> Messages <span class="badge">{{ message_count }}</span> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">{{ message_count }} New Messages</li>
+                        {% for message in messages %}
+                        <li class="message-preview">
+                            <a href="#">
+                                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                                <span class="name">{{ message.name }}:</span>
+                                <span class="message">{{ message.message }}</span>
+                                <span class="time"><i class="fa fa-clock-o"></i> {{ message.time|date:"h:i A" }}</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        {% endfor %}
+                        <li><a href="#">View Inbox <span class="badge">{{ message_count }}</span></a></li>
+                    </ul>
+                </li>
+            
+                <!-- Alerts Dropdown -->
+                <li class="dropdown alerts-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bell"></i> Alerts <span class="badge">{{ alert_count }}</span> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for alert in alerts %}
+                        <li><a href="#">{{ alert.type }} <span class="label label-{{ alert.label|lower }}">{{ alert.type }}</span></a></li>
+                        {% endfor %}
+                        <li class="divider"></li>
+                        <li><a href="#">View All</a></li>
+                    </ul>
+                </li>
+            
+                               <!-- User Dropdown -->
+                               <li class="dropdown user-dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-user"></i> {{ user.get_full_name|default:user.username }} <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                                    <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">{{ message_count }}</span></a></li>
+                                    <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        {% if user.is_authenticated %}
+                                            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-link" style="padding: 3px 20px; text-align: left; width: 100%;">
+                                                    <i class="fa fa-power-off"></i> Logout
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <a href="{% url 'login' %}" class="btn btn-link" style="padding: 3px 20px; text-align: left; width: 100%;">
+                                                <i class="fa fa-sign-in"></i> Login
+                                            </a>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </nav>
+            <main class="col-md-9 col-lg-10" id="content-area">
+                {% block content %}
+                <h2 class="text-center">Welcome to the Dashboard!</h2>
+                <div id="content-area" class="text-center">
+                    <p>Select an option to load content...</p>
+                    <p>Select "Profile" or "Settings" from the dropdown to load content dynamically.</p>
+                </div>
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- Custom JS  -->
+    <script src="{% static 'js/scripts.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".load-content").click(function (e) {
+                e.preventDefault();
+                const url = $(this).data("url");
+                $("#content-area").html("<p>Loading...</p>");
+
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    success: function (response) {
+                        $("#content-area").html(response.html);
+                    },
+                    error: function (xhr) {
+                        console.error("Error:", xhr.responseText);
+                        $("#content-area").html("<p style='color:red;'>Error loading content.</p>");
+                    }
+                });
+            });
+
+            $('.dropdown-menu a[href$="profile"]').click(function (e) {
+                e.preventDefault();
+                $('.col-md-9.col-lg-10').html("<p>Loading profile...</p>");
+
+                $.get("{% url 'profile' %}", function (data) {
+                    $('.col-md-9.col-lg-10').html(data.html);
+                }).fail(function () {
+                    alert("Failed to load profile.");
+                });
+            });
+        });
+    </script>
+</body>
+</html>

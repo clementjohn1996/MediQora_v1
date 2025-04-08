@@ -1,0 +1,191 @@
+/* ============================= */
+/* General Layout + Reset       */
+/* ============================= */
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ============================= */
+/* Navbar Styles                */
+/* ============================= */
+
+.navbar-user .dropdown-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+    height: 30px;
+}
+
+/* ============================= */
+/* Sidebar (Aside)              */
+/* ============================= */
+
+aside {
+    padding: 20px;
+    background-color: #f1f3f5;
+    min-height: 100vh;
+    border-right: 1px solid #dee2e6;
+}
+
+.list-group-item {
+    border: none;
+    border-radius: 0;
+    padding: 12px 20px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* ============================= */
+/* Main Content Area            */
+/* ============================= */
+
+main#content-area {
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+}
+
+#content-area > div {
+    margin-top: 20px;
+}
+
+/* ============================= */
+/* Avatar + User Profile        */
+/* ============================= */
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+}
+
+/* ============================= */
+/* Container and Card Styles    */
+/* ============================= */
+
+.container-fluid {
+    padding: 40px 30px;
+}
+
+.card {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 16px;
+    border-radius: 12px 12px 0 0;
+}
+
+/* ============================= */
+/* Buttons                      */
+/* ============================= */
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-sm {
+    margin: 4px;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* ============================= */
+/* Form Inputs & Labels         */
+/* ============================= */
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+    font-size: 15px;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+    outline: none;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.invalid-feedback {
+    display: none;
+    color: #dc3545;
+    font-size: 14px;
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback {
+    display: block;
+}
+
+/* ============================= */
+/* Tables                       */
+/* ============================= */
+
+.table th, .table td {
+    vertical-align: middle;
+    padding: 12px;
+    font-size: 15px;
+}
+main#content-area {
+    padding: 30px 30px 30px 30px; /* top, right, bottom, left */
+    padding-top: 0; /* override if needed */
+    margin-top: 0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-4">
+            {% if enquiry.id %} Edit Enquiry {% else %} Create New Enquiry {% endif %}
+        </h2>
+
+        <form method="POST" class="needs-validation" novalidate 
+              action="{% if enquiry.id %}{% url 'enquiry_edit' enquiry.id %}{% else %}{% url 'enquiry_create' %}{% endif %}">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="id_customer_name" class="form-label">Customer Name</label>
+                    {{ form.customer_name }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_mobile_no" class="form-label">Phone</label>
+                    {{ form.mobile_no }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ form.email }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_enquiry_date" class="form-label">Enquiry Date</label>
+                    <input type="date" id="id_enquiry_date" name="enquiry_date" class="form-control"
+                           value="{{ form.enquiry_date.value|default_if_none:'' }}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_country" class="form-label">Country</label>
+                    {{ form.country }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_state" class="form-label">State</label>
+                    {{ form.state }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_city" class="form-label">City</label>
+                    {{ form.city }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_patient_type" class="form-label">Patient Type</label>
+                    {{ form.patient_type }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="id_source_of_enquiry" class="form-label">Source of Enquiry</label>
+                    {{ form.source_of_enquiry }}
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label for="id_message" class="form-label">Message</label>
+                    {{ form.enquiry_description }}
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'enquiry_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    {% if enquiry.id %} Update {% else %} Submit {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

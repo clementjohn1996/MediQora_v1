@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Consultation</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Patient Name</label>
+                <input type="text" name="patient_name" class="form-control" value="{{ consultation.patient_name }}" required>
+            </div>
+            <div class="col-md-6">
+                <label>Description</label>
+                <input type="text" name="description" class="form-control" value="{{ consultation.description }}" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label>Doctor</label>
+                <select name="doctor" class="form-select" required>
+                    {% for doc in doctors %}
+                        <option value="{{ doc.id }}" {% if consultation.doctor.id == doc.id %}selected{% endif %}>{{ doc.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Consultation Type</label>
+                <select name="consultation_type" class="form-select" required>
+                    {% for t in types %}
+                        <option value="{{ t.id }}" {% if consultation.consultation_type.id == t.id %}selected{% endif %}>{{ t.type_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Date</label>
+                <input type="date" name="appointment_date" class="form-control" value="{{ consultation.appointment_date|date:'Y-m-d' }}" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Status</label>
+            <select name="status" class="form-select">
+                <option value="Pending" {% if consultation.status == "Pending" %}selected{% endif %}>Pending</option>
+                <option value="Processed" {% if consultation.status == "Processed" %}selected{% endif %}>Processed</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{% url 'upcoming_consultations' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

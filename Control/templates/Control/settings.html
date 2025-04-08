@@ -1,0 +1,9 @@
+<div class="container">
+    <h2>Settings</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}">
+        <button type="submit">Update</button>
+    </form>
+</div>

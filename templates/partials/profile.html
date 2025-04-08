@@ -1,0 +1,7 @@
+<div class="profile-box" style="max-width: 500px; margin: 40px auto; padding: 30px; background: #f9f9f9; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+    <img src="{{ user.profile.profile_picture.url|default:'https://placehold.co/100x100' }}"
+         alt="Profile Picture"
+         style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
+    <h2>Hello, {{ user.username }}!</h2>
+    <p>Email: <strong>{{ user.email }}</strong></p>
+</div>
