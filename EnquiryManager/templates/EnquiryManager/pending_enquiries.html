@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Pending Enquiries</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <th>Customer</th>
+            <th>Mobile</th>
+            <th>Interest</th>
+            <th>Date</th>
+            <th>QR Code</th>
+            <th>Add Consultation</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for enquiry in pending_list %}
+        <tr>
+            <td>{{ enquiry.id }}</td>
+            <td>{{ enquiry.customer_name }}</td>
+            <td>{{ enquiry.mobile_no }}</td>
+            <td>{{ enquiry.get_interest_display }}</td>
+            <td>{{ enquiry.enquiry_date }}</td>
+            <td>
+                {% if enquiry.qr_code_image %}
+                    <img src="{{ enquiry.qr_code_image.url }}" alt="QR Code" width="50" height="50">
+                {% else %}
+                    No QR available
+                {% endif %}
+            </td>
+            <td>
+                <form method="get" action="{% url 'add_consultation_from_enquiry' enquiry.id %}">
+                    <button type="submit" class="btn btn-primary">
+                        Add Consultation
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
