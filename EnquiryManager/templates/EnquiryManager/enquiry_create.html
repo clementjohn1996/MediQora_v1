@@ -2,98 +2,207 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="card shadow-sm p-4">
-        <h2 class="text-center mb-4 text-primary">Create New Enquiry</h2>
+<style>
+    .form-wrapper {
+        min-height: 100vh;
+        background-color: #f3f6fa;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 2rem 0;
+    }
+    .form-container {
+        background-color: #ffffff;
+        border-radius: 12px;
+        width: 95%;
+        max-width: 1400px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+        padding: 2rem;
+    }
+    .left-column, .right-column {
+        padding: 1rem;
+    }
+    .right-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .action-buttons {
+        padding-top: 1.5rem;
+        border-top: 1px solid #ddd;
+    }
+    .enquiry-entry {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .pagination a {
+        margin: 0 5px;
+    }
+</style>
 
-        <form method="POST" class="needs-validation" novalidate>
+<div class="form-wrapper">
+    <div class="form-container">
+        <form method="POST" id="enquiry_form" class="row" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="row g-3">
+            
+            <!-- LEFT COLUMN -->
+            <div class="col-md-9 left-column border-end">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Enquiry Date</label>
+                        {{ form.enquiry_date }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Customer Name</label>
+                        {{ form.customer_name }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Mobile Number</label>
+                        {{ form.mobile_no }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Email</label>
+                        {{ form.email }}
+                    </div>
 
-                <div class="col-md-6">
-                    <label for="{{ form.enquiry_date.id_for_label }}" class="form-label fw-bold">Enquiry Date</label>
-                    {{ form.enquiry_date }}
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Country</label>
+                        {{ form.country }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">State</label>
+                        <input list="state-options" name="state" id="id_state" class="form-control" value="{{ form.state.value }}">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">City</label>
+                        <input list="city-options" name="city" id="id_city" class="form-control" value="{{ form.city.value }}">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Pincode</label>
+                        <input list="pincode-options" name="pincode" id="id_pincode" class="form-control" value="{{ form.pincode.value }}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Enquiry For</label>
+                        {{ form.enquiry_for }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Patient Type</label>
+                        {{ form.patient_type }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Source of Enquiry</label>
+                        {{ form.source_of_enquiry }}
+                    </div>
+                    <div class="col-md-3" id="referred-by-group" style="display: none;">
+                        <label class="form-label fw-bold">Referred By</label>
+                        {{ form.referred_by }}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Interest</label>
+                        {{ form.interest }}
+                    </div>
+
+                    {% for field in dynamic_form %}
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
                 </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.customer_name.id_for_label }}" class="form-label fw-bold">Customer Name</label>
-                    {{ form.customer_name }}
-                </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.mobile_no.id_for_label }}" class="form-label fw-bold">Mobile Number</label>
-                    {{ form.mobile_no }}
-                </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">Email</label>
-                    {{ form.email }}
-                </div>
-
-                <!-- Country -->
-                <div class="col-md-6">
-                    <label for="{{ form.country.id_for_label }}" class="form-label fw-bold">Country</label>
-                    {{ form.country }}
-                    <datalist id="country-options"></datalist>
-                </div>
-
-                <!-- State -->
-                <div class="col-md-6">
-                    <label for="{{ form.state.id_for_label }}" class="form-label fw-bold">State</label>
-                    {{ form.state }}
-                    <datalist id="state-options"></datalist>
-                </div>                
-
-                <!-- City -->
-                <div class="col-md-6">
-                    <label for="{{ form.city.id_for_label }}" class="form-label fw-bold">City</label>
-                    {{ form.city }}
-                    <datalist id="city-options"></datalist>
-                </div>                
-
-                <!-- Pincode -->
-                <div class="col-md-6">
-                    <label for="{{ form.pincode.id_for_label }}" class="form-label fw-bold">Pincode</label>
-                    {{ form.pincode }}
-                    <datalist id="pincode-options"></datalist>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.enquiry_for.id_for_label }}" class="form-label fw-bold">Enquiry For</label>
-                    {{ form.enquiry_for }}
-                    <datalist id="enquiry-options"></datalist>
-                </div>
-                                                 
-
-                <div class="col-md-6">
-                    <label for="{{ form.patient_type.id_for_label }}" class="form-label fw-bold">Patient Type</label>
-                    {{ form.patient_type }}
-                </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.source_of_enquiry.id_for_label }}" class="form-label fw-bold">Source of Enquiry</label>
-                    {{ form.source_of_enquiry }}
-                </div>
-                
-                <!-- Referred By (Hidden by default) -->
-                <div class="col-md-6" id="referred-by-group" style="visibility: hidden;">
-                    <label for="{{ form.referred_by.id_for_label }}" class="form-label fw-bold">Referred By</label>
-                    {{ form.referred_by }}
-                </div>
-                
-
-                <div class="col-12">
-                    <label for="{{ form.enquiry_description.id_for_label }}" class="form-label fw-bold">Enquiry Description</label>
-                    {{ form.enquiry_description }}
-                </div>
-
             </div>
 
-            <div class="d-flex justify-content-end mt-4">
+            <!-- RIGHT COLUMN -->
+            <div class="col-md-3 right-column">
+                <div>
+                    <label class="form-label fw-bold">Enquiry Description</label>
+                    {{ form.enquiry_description }}
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="col-12 action-buttons text-center mt-4">
                 <a href="{% url 'enquiry_list' %}" class="btn btn-outline-secondary me-2">Cancel</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
+
+        <!-- Recent Enquiries -->
+        <h3 class="fw-bold mb-3">Today's Enquiries</h3>
+
+        {% if page_obj %}
+        <div class="table-responsive mt-3">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Enquiry Date</th>
+                        <th>QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for enquiry in page_obj %}
+                    <tr>
+                        <td>{{ enquiry.id }}</td>
+                        <td>{{ enquiry.customer_name }}</td>
+                        <td>{{ enquiry.email }}</td>
+                        <td>{{ enquiry.mobile_no }}</td>
+                        <td>{{ enquiry.enquiry_date }}</td>
+                        <td>
+                            {% if enquiry.qr_code_image %}
+                            <img src="{{ enquiry.qr_code_image.url }}" alt="QR Code" class="img-fluid" style="max-width: 100px;">
+                            {% else %}
+                            <span>No QR</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% else %}
+        <p class="text-center text-muted mt-3">No enquiries today.</p>
+        {% endif %}
     </div>
 </div>
 

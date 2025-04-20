@@ -38,12 +38,13 @@
                 <li class="active"><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
                 <li><a href="{% url 'charts' %}"><i class="fa fa-bar-chart-o"></i> Charts</a></li>
                 <li><a href="{% url 'enquiry_create' %}"><i class="fa fa-edit"></i> New Enquiry</a></li>
+                <li><a href="{% url 'pending_enquiries' %}"><i class="fa fa-clock-o"></i> Pending Enquiry List</a></li>
                 <li><a href="{% url 'enquiry_list' %}"><i class="fa fa-table"></i> Enquiry List</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-table fa fa-stethoscope"></i> Consultation Management <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'add_consultations' %}">Add / Edit Consultation</a></li>
-                        <li><a href="{% url 'consultation' %}">Today's Consultations</a></li>
+                        <li><a href="{% url 'add_consultation' %}">Add Consultation</a></li>
+                        <li><a href="{% url 'consultation' %}">Consultations</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -51,14 +52,14 @@
                         <i class="fa fa-medkit"></i> Surgery Schedule <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
+                        {% if consultation_id %}
+                        <a href="{% url 'schedule_surgery_module' consultation_id %}"><i class="fa fa-plus-square"></i> Add Surgery</a>
+                        {% else %}
+                            <a href="#"><i class="fa fa-plus-square"></i> Add Surgery</a>  {# or disable it, or link to a general surgery form #}
+                        {% endif %}
+
                         <li>
-                            <a href="{% url 'add_surgery' %}"><i class="fa fa-plus-square"></i> Add / Edit Surgery</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'today_surgeries' %}"><i class="fa fa-calendar"></i> Today's Surgeries</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'upcoming_surgeries' %}"><i class="fa fa-clock-o"></i> Upcoming Surgeries</a>
+                            <a href="{% url 'surgeries' %}"><i class="fa fa-clock-o"></i> Upcoming Surgeries</a>
                         </li>
                     </ul>
                 </li>
