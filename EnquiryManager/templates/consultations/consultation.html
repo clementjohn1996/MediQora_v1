@@ -36,23 +36,15 @@
                 
                 <td>
                     {% if pr.enquiry %}
-                    <a href="{% url 'schedule_surgery' pr.enquiry.id %}" class="btn btn-sm btn-warning">
-                        Schedule Surgery
-                    </a>
+                        <a href="{% url 'schedule_surgery' pr.enquiry.id %}" class="btn btn-sm btn-warning">
+                            Schedule Surgery
+                        </a>
                     {% endif %}
                     {% if pr.enquiry.id %}
-                    <a href="{% url 'complete_consultation' pr.enquiry.id %}" class="btn btn-sm btn-success">Complete Consultation</a>
-                        <td>
-                            <!-- Reschedule Button -->
-                            {% if pr.enquiry.id %}
-                                <a href="{% url 'reschedule' pr.enquiry.id %}" class="btn btn-warning">Reschedule</a>
-
-                            {% else %}
-                                <span class="text-muted">No ID</span>
-                            {% endif %}
-                        </td>
+                        <a href="{% url 'complete_consultation' pr.enquiry.id %}" class="btn btn-sm btn-success">Complete Consultation</a>
+                        <a href="{% url 'reschedule_consultation' pr.id %}" class="btn btn-warning">Reschedule</a>
                     {% else %}
-                        <span class="text-danger">Invalid Consultation</span>
+                        <span class="text-muted">No ID</span>
                     {% endif %}
                 </td>
             </tr>
@@ -62,10 +54,9 @@
                 </tr>
             {% endfor %}
         </tbody>
-        
     </table>
  </div>
- 
+
  <!-- Upcoming Consultations -->
  <div class="processed mt-5">
     <h2 class="mb-3">Upcoming Consultations</h2>
@@ -100,8 +91,7 @@
                     <td>
                         <!-- Reschedule Button -->
                         {% if pr.enquiry.id %}
-                            <a href="{% url 'reschedule' pr.enquiry.id %}" class="btn btn-warning">Reschedule</a>
-
+                            <a href="{% url 'reschedule_consultation' pr.id %}" class="btn btn-warning">Reschedule</a>
                         {% else %}
                             <span class="text-muted">No ID</span>
                         {% endif %}
@@ -115,7 +105,7 @@
         </tbody>
     </table>
  </div>
- 
+
  <!-- Expired Consultations -->
  <div class="processed mt-5">
     <h2 class="mb-3">Expired Consultations</h2>
@@ -150,8 +140,7 @@
                     <td>
                         <!-- Reschedule Button -->
                         {% if pr.enquiry.id %}
-                            <a href="{% url 'reschedule' pr.enquiry.id %}" class="btn btn-warning">Reschedule</a>
-
+                            <a href="{% url 'reschedule_consultation' pr.id %}" class="btn btn-warning">Reschedule</a>
                         {% else %}
                             <span class="text-muted">No ID</span>
                         {% endif %}
@@ -165,5 +154,5 @@
         </tbody>
     </table>
  </div>
- 
+
 {% endblock %}

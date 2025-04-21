@@ -34,12 +34,17 @@
                                 <button type="submit" class="btn btn-outline-success btn-sm">✔️ Completed</button>
                             </form>
                             <td>
-                                <!-- Reschedule Button -->
-                                {% if enquiry_id %}
-                                    <a href="{% url 'reschedule' enquiry.id %}" class="btn btn-warning">Reschedule</a>
-                                {% else %}
-                                    <span class="text-muted">No ID</span>
-                                {% endif %}
+                                <div class="reschedule-wrapper" style="display: inline-block;">
+                                    <button type="button" class="btn btn-sm btn-warning show-calendar-btn"
+                                        data-id="{{ pr.id }}" data-type="consultation">
+                                        Reschedule
+                                    </button>
+                                    <div id="calendar-{{ pr.id }}" class="calendar-popup d-none"></div>
+                                </div>                                
+                            {% else %}
+                                <span class="text-muted">No ID</span>
+                            {% endif %}
+                            
                             </td>
 
                             <!-- Schedule Surgery Button -->

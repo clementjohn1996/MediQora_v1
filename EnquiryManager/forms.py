@@ -125,3 +125,11 @@ class ConsultationForm(forms.ModelForm):
             'appointment_date': forms.DateInput(attrs={'type': 'date'}),
             'consultation_time': forms.TimeInput(attrs={'type': 'time'}),
         }
+class RescheduleForm(forms.ModelForm):
+    class Meta:
+        model = Consultation
+        fields = ['appointment_date', 'consultation_time']
+        widgets = {
+            'appointment_date': forms.DateInput(attrs={'type': 'date'}),
+            'consultation_time': forms.TimeInput(attrs={'type': 'time'})
+        }
