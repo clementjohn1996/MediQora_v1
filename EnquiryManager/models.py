@@ -47,7 +47,7 @@ class Enquiry(models.Model):
         ('not_interested', 'Not Interested'),
         ('waiting', 'Waiting for Decision'),
     ]
-    interest = models.CharField(
+    interest= models.CharField(
         max_length=20,
         choices=INTEREST_CHOICES,
         default='waiting',

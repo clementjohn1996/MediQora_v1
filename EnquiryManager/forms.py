@@ -18,6 +18,7 @@ class EnquiryForm(forms.ModelForm):
             "patient_type",
             "source_of_enquiry",
             "referred_by",
+            "interest"
         ]
         widgets = {
             "enquiry_date": forms.DateInput(attrs={
@@ -76,7 +77,7 @@ class EnquiryForm(forms.ModelForm):
             "enquiry_for": forms.TextInput(attrs={
                 "class": "form-control",
                 "autocomplete": "off",
-                "list": "enquiry-options",  # Must match <datalist id="">
+                "list": "enquiry-options",  
                 "placeholder": "Enquiry for..."
             }),
 
@@ -89,6 +90,13 @@ class EnquiryForm(forms.ModelForm):
             "referred_by": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Optional"
+            }),
+            "interest": forms.Select(attrs={
+                "class": "form-control",
+                "autocomplete": "off",
+                "list": "interest-options",
+                "placeholder": "Select"
+                
             }),
         }
 

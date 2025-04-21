@@ -8,6 +8,7 @@ from .models import (
     CityEntry,
     PincodeEntry,
     DynamicField,
+    
 )
 
 @admin.register(Doctor)
