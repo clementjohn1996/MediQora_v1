@@ -1,5 +1,5 @@
 from django import forms
-from .models import Enquiry
+from .models import Enquiry,Consultation,DynamicField
 
 class EnquiryForm(forms.ModelForm):
     class Meta:
@@ -90,4 +90,38 @@ class EnquiryForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Optional"
             }),
+        }
+
+class DynamicEnquiryForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(DynamicEnquiryForm, self).__init__(*args, **kwargs)
+
+        for field in DynamicField.objects.all():
+            field_name = field.name.lower().replace(" ", "_")
+            if field.field_type == 'text':
+                self.fields[field_name] = forms.CharField(
+                    label=field.name,
+                    required=field.required,
+                    widget=forms.TextInput(attrs={'class': 'form-control'})
+                )
+            elif field.field_type == 'number':
+                self.fields[field_name] = forms.IntegerField(
+                    label=field.name,
+                    required=field.required,
+                    widget=forms.NumberInput(attrs={'class': 'form-control'})
+                )
+            elif field.field_type == 'date':
+                self.fields[field_name] = forms.DateField(
+                    label=field.name,
+                    required=field.required,
+                    widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+                )
+
+class ConsultationForm(forms.ModelForm):
+    class Meta:
+        model = Consultation
+        fields = ['patient_name', 'appointment_date', 'consultation_time', 'doctor', 'consultation_type']
+        widgets = {
+            'appointment_date': forms.DateInput(attrs={'type': 'date'}),
+            'consultation_time': forms.TimeInput(attrs={'type': 'time'}),
         }

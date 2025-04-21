@@ -20,8 +20,8 @@ class Enquiry(models.Model):
     qr_code_hash = models.CharField(max_length=64, unique=True, blank=True, null=True)
     qr_code_image = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
     country = models.CharField(max_length=50)
-    state = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, blank=True, default="")
+    city = models.CharField(max_length=100, blank=True, default="")
     pincode = models.CharField(max_length=50)
 
     enquiry_for = models.CharField(max_length=255, blank=True, null=True)
