@@ -15,6 +15,7 @@ from .models import (
 from .forms import EnquiryForm, DynamicEnquiryForm, ConsultationForm
 import qrcode
 import io
+from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import Enquiry, Consultation
@@ -290,19 +291,46 @@ def add_consultation(request):
     })
 
 
-@login_required
 def edit_consultation(request, enquiry_id):
-    consultation = get_object_or_404(Consultation, id=enquiry_id)
+    consultation = get_object_or_404(Consultation, pk=enquiry_id)
+    doctors = Doctor.objects.all()
+    types = ConsultationType.objects.all()
 
     if request.method == 'POST':
-        form = ConsultationForm(request.POST, instance=consultation)
-        if form.is_valid():
-            form.save()
-            return redirect('consultation_detail', enquiry_id=consultation.id)
-    else:
-        form = ConsultationForm(instance=consultation)
+        consultation.description = request.POST.get('description')
+        consultation.doctor_id = request.POST.get('doctor')
+        consultation.consultation_type_id = request.POST.get('consultation_type')
+        consultation.appointment_date = request.POST.get('appointment_date')
+        consultation.save()
+        return redirect('consultation')  # or wherever you need
 
-    return render(request, 'edit_consultation.html', {'form': form, 'consultation': consultation})
+    return render(request, 'consultations/edit_consultation.html', {
+        'consultation': consultation,
+        'doctors': doctors,
+        'types': types
+    })
+
+@login_required
+def reschedule_consultation(request, enquiry_id):
+    consultation = get_object_or_404(Consultation, pk=enquiry_id)
+    enquiry = consultation.enquiry  # Assuming Consultation has FK to Enquiry
+    doctors = Doctor.objects.all()
+    types = ConsultationType.objects.all()
+
+    if request.method == 'POST':
+        consultation.appointment_date = request.POST.get('appointment_date')
+        consultation.save()
+        return redirect('consultation')
+
+    context = {
+        'consultation': consultation,
+        'doctors': doctors,
+        'types': types,
+        'enquiry': enquiry,
+        'today': date.today(),
+    }
+    return render(request, 'consultations/reschedule_consultation.html', context)
+
 @login_required
 def mark_as_processed(request, id):
     consultation = get_object_or_404(Consultation, id=id)
@@ -509,7 +537,33 @@ def generate_qr_code(surgery):
 
     return surgery.qr_code
 
+@require_POST
+def reschedule_view(request):
+    model_map = {
+        'consultation': Consultation,
+        'surgery': Surgery,
+    }
 
+    object_type = request.POST.get('object_type')
+    object_id = request.POST.get('object_id')
+    new_date = parse_date(request.POST.get('new_date'))
+
+    if not all([object_type, object_id, new_date]):
+        return JsonResponse({'success': False, 'error': 'Missing required fields'}, status=400)
+
+    model_class = model_map.get(object_type.lower())
+    if not model_class:
+        return JsonResponse({'success': False, 'error': 'Invalid object type'}, status=400)
+
+    try:
+        instance = model_class.objects.get(pk=object_id)
+        if hasattr(instance, 'set_schedule_date'):
+            instance.set_schedule_date(new_date)
+            return JsonResponse({'success': True, 'new_date': str(instance.get_schedule_date())})
+        else:
+            return JsonResponse({'success': False, 'error': 'Model not reschedulable'}, status=400)
+    except model_class.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Object not found'}, status=404)
 
 def feedback(request):
     feedback=[]

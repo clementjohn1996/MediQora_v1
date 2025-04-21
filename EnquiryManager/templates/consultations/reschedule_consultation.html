@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Edit Consultation for {{ consultation.patient_name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Description</th>
+                    <th>Doctor</th>
+                    <th>Consultation Type</th>
+                    <th>Appointment Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- ID field shown, read-only -->
+                    <td><input type="text" class="form-control" value="{{ consultation.enquiry.id }}" readonly></td>
+
+                    <!-- Read-only patient name -->
+                    <td><input type="text" class="form-control" value="{{ consultation.patient_name }}" readonly></td>
+
+                    <!-- Description -->
+                    <td><input type="text" name="description" class="form-control" value="{{ consultation.description }}" readonly></td>
+
+                    <!-- Doctor dropdown -->
+                    <td>
+                        <select name="doctor" class="form-select" disabled>
+                            <option value="">Select Doctor</option>
+                            {% for doc in doctors %}
+                                <option value="{{ doc.id }}" {% if consultation.doctor.id == doc.id %}selected{% endif %}>
+                                    {{ doc.name }} ({{ doc.department }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+
+                    <!-- Consultation Type -->
+                    <td>
+                        <select name="consultation_type" class="form-select" disabled>
+                            <option value="">Select Type</option>
+                            {% for t in types %}
+                                <option value="{{ t.id }}" {% if consultation.consultation_type.id == t.id %}selected{% endif %}>
+                                    {{ t.type_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+
+                    <!-- Appointment Date -->
+                    <td>
+                        <input type="date" name="appointment_date" class="form-control" value="{{ consultation.appointment_date|date:'Y-m-d' }}" min="{{ today|date:'Y-m-d' }}" required>
+                    </td>
+
+                    <!-- Save Button -->
+                    <td>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}

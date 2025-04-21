@@ -17,10 +17,11 @@ urlpatterns = [
     
     # Consultations
     path('consultation/', views.consultation, name='consultation'),
+    path('enquiry/consultation/edit/<int:enquiry_id>/', views.edit_consultation, name='edit_consultation'),
+    path('enquiry/consultation/reschedule/<int:enquiry_id>/', views.reschedule_consultation, name='reschedule_consultation'),
+
     path('consultation/complete/<int:enquiry_id>/', views.complete_consultation, name='complete_consultation'),
-    path('consultation/reschedule/<int:enquiry_id>/', views.reschedule, name='reschedule'),
     path('consultation/add/', views.add_consultation, name='add_consultation'),
-    path('consultation/edit/<int:enquiry_id>/', views.edit_consultation, name='edit_consultation'),
     path('consultation/mark-processed/<int:id>/', views.mark_as_processed, name='mark_as_processed'),
     path('consultation/add-from-enquiry/<int:enquiry_id>/', views.add_consultation_from_enquiry, name='add_consultation_from_enquiry'),
 
