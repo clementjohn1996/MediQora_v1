@@ -8,6 +8,7 @@ from .models import (
     CityEntry,
     PincodeEntry,
     DynamicField,
+    EnquiryFor
     
 )
 
@@ -58,3 +59,7 @@ class DynamicFieldAdmin(admin.ModelAdmin):
     list_display = ('name', 'field_type', 'required')
     list_filter = ('field_type', 'required')
     search_fields = ('name',)
+
+@admin.register(EnquiryFor)
+class EnquiryForAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name'] 

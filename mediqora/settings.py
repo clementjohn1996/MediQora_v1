@@ -8,7 +8,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Security settings
 SECRET_KEY = 'django-insecure-=e+q$91inxf)6_+2_=e8+qug7z42x)zqafdux9buk54r8^2un!'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Installed apps
 INSTALLED_APPS = [

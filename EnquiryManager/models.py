@@ -10,6 +10,15 @@ class PatientCategory(models.Model):
     def __str__(self):
         return self.name
 
+class EnquiryFor(models.Model):
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = "Enquiry For"
+        verbose_name_plural = "Enquiry For"
+
+    def __str__(self):
+        return self.name
 
 class Enquiry(models.Model):
     enquiry_date = models.DateField(default=timezone.now)
@@ -23,8 +32,7 @@ class Enquiry(models.Model):
     state = models.CharField(max_length=100, blank=True, default="")
     city = models.CharField(max_length=100, blank=True, default="")
     pincode = models.CharField(max_length=50)
-
-    enquiry_for = models.CharField(max_length=255, blank=True, null=True)
+    enquiry_for =  models.ForeignKey(EnquiryFor, on_delete=models.CASCADE)
 
     PATIENT_TYPES = [
         ('OPD', 'Outpatient'),
