@@ -74,11 +74,11 @@ class EnquiryForm(forms.ModelForm):
                 "class": "form-control"
             }),
 
-            "enquiry_for": forms.TextInput(attrs={
+            "enquiry_for": forms.Select(attrs={
                 "class": "form-control",
                 "autocomplete": "off",
-                "list": "enquiry-options",  
-                "placeholder": "Enquiry for..."
+                "list": "interest-options",
+                "placeholder": "Select"
             }),
 
             "patient_type": forms.Select(attrs={
